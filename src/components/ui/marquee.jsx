@@ -1,4 +1,3 @@
-"use client";
 import FastMarquee from "react-fast-marquee";
 import { cn } from "@/lib/utils";
 

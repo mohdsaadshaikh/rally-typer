@@ -10,6 +10,15 @@
 @import "tw-animate-css";
 @custom-variant dark (&:is(.dark *));
 
+.prose :is(a > strong):hover {
+  color: blue !important;
+  text-decoration: underline;
+}
+
+.prose :is(p, h1, h2, h3, h4, h5, h6, li, span, strong) {
+  color: white !important;
+}
+
 /* NATS Font */
 @font-face {
   font-family: "NATS Regular";

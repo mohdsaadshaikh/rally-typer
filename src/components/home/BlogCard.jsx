@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Clock, Tag } from "lucide-react";
+import { formatDate } from "@/lib/utils";
 
 const BlogCard = ({ blog }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <Link to={`/blogs/${blog.id}`}>
+    <Link to={`/blogs/${blog.slug}`}>
       <div
-        className="relative bg-brand-dark-5 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer group"
+        className="relative h-[485px] bg-brand-dark-5 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer group"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         style={{
@@ -24,9 +25,9 @@ const BlogCard = ({ blog }) => {
         {/* Image */}
         <div className="relative h-64 p-4 overflow-hidden">
           <img
-            src={blog.image}
+            src={blog.blogimage}
             alt={blog.title}
-            className="w-full h-full object-cover rounded-2xl "
+            className="w-full h-full object-cover rounded-xl "
             onError={(e) => {
               e.target.style.display = "none";
             }}
@@ -39,7 +40,7 @@ const BlogCard = ({ blog }) => {
           <div className="mb-3 flex items-center gap-2">
             <Tag size={14} className="text-brand" />
             <span className="text-brand text-sm font-semibold uppercase tracking-wide">
-              {blog.category}
+              Rally Typer
             </span>
           </div>
 
@@ -59,21 +60,21 @@ const BlogCard = ({ blog }) => {
                 <div className="absolute inset-0 rounded-full bg-brand/30 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="relative w-9 h-9 rounded-full flex items-center justify-center overflow-hidden ring-2 ring-transparent group-hover:ring-brand/50 transition-all duration-300">
                   <img
-                    src={`https://i.pravatar.cc/150?u=${blog.author}`}
-                    alt={blog.author}
+                    src={`https://i.pravatar.cc/150?u=Elizabeth_Slavin`}
+                    alt="author"
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
                   />
                 </div>
               </div>
               <div className="text-white/80 font-medium text-sm group-hover:text-white transition-colors duration-300">
-                {blog.author}
+                Admin
               </div>
             </div>
 
             {/* Date with Icon */}
             <div className="flex items-center gap-1.5 text-gray-400 text-xs group-hover:text-gray-300 transition-colors duration-300">
               <Clock size={12} />
-              <span>{blog.date}</span>
+              <span>{formatDate(blog.upload_date)}</span>
             </div>
           </div>
         </div>

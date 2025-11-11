@@ -1,6 +1,5 @@
 import React from "react";
 import HeroSection from "@/components/home/HeroSection";
-import DifficultySection from "@/components/home/DifficultySection";
 import LeaderboardSection from "@/components/home/LeaderboardSection";
 import WorldMapSection from "@/components/home/WorldMapSection";
 import AboutSection from "@/components/home/AboutSection";
@@ -11,7 +10,15 @@ const HomePage = () => {
   return (
     <div className="min-h-screen">
       <HeroSection />
-      <DifficultySection />
+      <iframe
+        allow="fullscreen"
+        className="w-full h-[90vh] border-0 bg-black"
+        // src="https://rallytyper.com/Newgame"
+        src="/Newgame/index.html"
+        title="New Game "
+        id="game"
+        // className="iframe"
+      />
       <LeaderboardSection />
       <WorldMapSection />
       <AboutSection />

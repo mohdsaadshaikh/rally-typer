@@ -1,35 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BlogCard from "./BlogCard";
+import { BLOGS_SERVER_URL } from "@/constants/site";
+import Loader from "../common/Loader";
 
 const BlogSection = () => {
-  const blogs = [
-    {
-      id: 1,
-      title: "The Evolution of Typing Skills: From Typewriters to Typing Games",
-      author: "Elizabeth Slavin",
-      date: "August 20, 2022",
-      category: "Technology",
-      image: "/images/blog.png",
-    },
-    {
-      id: 2,
-      title:
-        "Real-Life Applications of Typing Skills: Why Speed and Accuracy Matter",
-      author: "Elizabeth Slavin",
-      date: "August 20, 2022",
-      category: "Technology",
-      image: "/images/blog.png",
-    },
-    {
-      id: 3,
-      title:
-        "Real-Life Applications of Typing Skills: Why Speed and Accuracy Matter",
-      author: "Elizabeth Slavin",
-      date: "August 20, 2022",
-      category: "Technology",
-      image: "/images/blog.png",
-    },
-  ];
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`${BLOGS_SERVER_URL}/fetch-blog-posts`)
+      .then((response) => response.json())
+      .then((data) => {
+        setBlogs(data.slice(0, 3));
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching blogs:", error);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <section className="py-24 px-6 bg-black">

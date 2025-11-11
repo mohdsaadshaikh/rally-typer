@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 let formattedTextInitialized = false; // Flag to track initialization
 let formattedTEXT = "";
+const backtoMenu = document.getElementById("back-to-menu");
 
 let initText = function () {
   // fill text div with text
@@ -13,7 +14,7 @@ let initText = function () {
     textArray = EASY_TEXTS;
   } else if (difficulty === 2) {
     textArray = NORMAL_TEXTS;
-  } else if (difficulty === 3) {
+  } else if (difficulty === 3) { 
     textArray = HARD_TEXTS;
   } else {
     textArray = ADVANCED_TEXTS;
@@ -30,11 +31,7 @@ let initText = function () {
   if (!gameState.correct) token = '<span class="marked incorrect">';
   ih = ih.replace(token, "");
   ih = ih.replace("</span>", "");
-  ih =
-    '<span class="marked correct">' +
-    ih[index] +
-    "</span>" +
-    ih.substring(index + 1, ih.length);
+  ih = '<span class="marked correct">' + ih[index] + "</span>" + ih.substring(index + 1, ih.length);
   textDiv.innerHTML = ih;
 
   gameState.correct = true;
@@ -50,11 +47,7 @@ let initText = function () {
 
 let initEndingScreen = function () {
   let time = car2.finishingTime / 1000; // in seconds
-  let accuracy =
-    100 -
-    (gameState.stats.mistakes /
-      (gameState.stats.characters + gameState.stats.mistakes)) *
-      100; // in percents
+  let accuracy = 100 - (gameState.stats.mistakes / (gameState.stats.characters + gameState.stats.mistakes)) * 100; // in percents
   accuracy = Math.round(accuracy * 100) / 100;
   let GWAM = gameState.stats.characters / 5 / (time / 60); // 1 word = 5 characters
   GWAM = Math.round(GWAM * 100) / 100;
@@ -62,6 +55,7 @@ let initEndingScreen = function () {
   statsPs[0].textContent = " Time: " + time + "s ";
   statsPs[1].textContent = " Accuracy: " + accuracy + "% ";
   statsPs[2].textContent = " GWAM: " + GWAM;
+  // console.log( "Car1: " + car1.finishingTime );
 
   // Generate key for current difficulty
   const difficultyNames = ["noob", "easy", "normal", "hard", "advanced"];
@@ -78,66 +72,24 @@ let initEndingScreen = function () {
   // Display the PB for the current difficulty on the end screen
   statsPs[3].textContent = `Personal Best GWAM (${currentLevelName}): ${personalBest}`;
 
-  let place = "1st Place!";
-  if (car1.finishingTime < car2.finishingTime) place = "2nd Place";
-  endingDiv.children[0].textContent = place;
+  const leaderboardForm = document.querySelector(".leaderboard-form");
+  const submitButton = leaderboardForm.querySelector("button");
+
+  submitButton.textContent = "Submit to leaderboard";
+  submitButton.disabled = false;
+
+  let token = "1st Place!";
+  if (car1.finishingTime < car2.finishingTime) token = "2nd Place";
+  endingDiv.children[0].textContent = token;
   endingDiv.style.display = "inline-block";
-
-  // Get user data from window (passed from React app)
-  const userData = window.gameUserData || {};
-
-  // Prepare game results object
-  const gameResults = {
-    time: time,
-    accuracy: accuracy,
-    gwam: GWAM,
-    personalBest: personalBest,
-    place: place,
-    difficulty: currentLevelName,
-    difficultyLevel: difficulty,
-    username: userData.username || "Guest",
-    country: userData.country || "",
-    countryCode: userData.countryCode || "",
-    playerId: userData.playerId || localStorage.getItem("playerId") || "",
-    timestamp: Date.now(),
-    characters: gameState.stats.characters,
-    mistakes: gameState.stats.mistakes,
-  };
-
-  // Log results to console
-  console.log("🎮 GAME COMPLETED! Results:", gameResults);
-
-  // Send results back to parent window (React app)
-  if (window.parent && window.parent !== window) {
-    window.parent.postMessage(
-      {
-        type: "GAME_RESULTS",
-        payload: gameResults,
-      },
-      window.location.origin
-    );
-  }
-
-  // Also send to opener if opened in new window
-  if (window.opener && !window.opener.closed) {
-    window.opener.postMessage(
-      {
-        type: "GAME_RESULTS",
-        payload: gameResults,
-      },
-      window.location.origin
-    );
-  }
-
-  // TODO: Send game results to Express.js backend
-  // You can implement backend submission here
-  console.log("📊 Ready to send to backend:", gameResults);
+  backtoMenu.style.display = "none";
 };
 
 let countdownTimer; // Variable to store the countdown timer
 
 let startCountdown = function () {
   const duration = 1500;
+  backtoMenu.style.display = "block";
   car1.animations.drive.paused = true;
 
   // Reset countdown elements to their initial state
@@ -185,19 +137,14 @@ let startRace = function () {
   gameState.typingAllowed = true;
   gameState.startingTime = Date.now(); // in miliseconds
   const fps = 30;
-  car1.animations.drive.timeScale =
-    DIFFICULTY_LEVELS[difficulty].ENEMY_STARTING_SPEED;
+  car1.animations.drive.timeScale = DIFFICULTY_LEVELS[difficulty].ENEMY_STARTING_SPEED;
   let speedUp = setInterval(function () {
-    if (
-      car1.animations.drive.timeScale >=
-      DIFFICULTY_LEVELS[difficulty].ENEMY_MAX_SPEED
-    ) {
+    if (car1.animations.drive.timeScale >= DIFFICULTY_LEVELS[difficulty].ENEMY_MAX_SPEED) {
       clearInterval(speedUp);
       return;
     }
     car1.animations.drive.timeScale +=
-      (DIFFICULTY_LEVELS[difficulty].ENEMY_MAX_SPEED -
-        DIFFICULTY_LEVELS[difficulty].ENEMY_STARTING_SPEED) /
+      (DIFFICULTY_LEVELS[difficulty].ENEMY_MAX_SPEED - DIFFICULTY_LEVELS[difficulty].ENEMY_STARTING_SPEED) /
       (DIFFICULTY_LEVELS[difficulty].ENEMY_SPEEDING_UP_TIME * fps);
   }, 1000 / fps);
 };
@@ -323,36 +270,46 @@ let chooseDifficultyLevel = function (difficulty_level) {
   } else {
     resetGame();
   }
-
-  // Hide main menu if it exists (for backward compatibility)
-  if (mainMenuDiv) {
-    mainMenuDiv.style.display = "none";
-  }
+  mainMenuDiv.style.display = "none";
 };
 
-// if (document.fullscreenEnabled) {
-//   const fullscreen_button = document.createElement("button");
-//   fullscreen_button.setAttribute("id", "fullscreen-button");
-//   fullscreen_button.addEventListener("click", toggle_fullscreen);
-//   fullscreen_button.innerHTML = `
-// <svg viewBox="0 0 24 24">
-// <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12
-// 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
-// </svg>
-// <svg viewBox="0 0 24 24">
-// <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6
-// 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
-// </svg>
-// `;
-//   document.body.appendChild(fullscreen_button);
-// }
+let goBackToMenu = function () {
+  finishAnimation();
+  mainMenuDiv.style.display = "inline-block";
+};
 
-// function toggle_fullscreen() {
-//   if (!document.fullscreenElement) {
-//     document.body.requestFullscreen();
-//     document.body.setAttribute("fullscreen", "");
-//   } else {
-//     document.exitFullscreen();
-//     document.body.removeAttribute("fullscreen");
-//   }
-// }
+if (document.fullscreenEnabled) {
+  const fullscreen_button = document.createElement("button");
+  fullscreen_button.setAttribute("id", "fullscreen-button");
+  fullscreen_button.addEventListener("click", toggle_fullscreen);
+  fullscreen_button.innerHTML = `
+<svg viewBox="0 0 24 24">
+<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 
+7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+</svg>
+<svg viewBox="0 0 24 24">
+<path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 
+11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
+</svg>
+`;
+  document.body.appendChild(fullscreen_button);
+}
+
+function toggle_fullscreen() {
+  if (!document.fullscreenElement) {
+    document.body.requestFullscreen();
+    document.body.setAttribute("fullscreen", "");
+  } else {
+    document.exitFullscreen();
+    document.body.removeAttribute("fullscreen");
+  }
+}
+
+// document.addEventListener("DOMContentLoaded", function () {
+//   var myButton = document.getElementById("fullscreen-button");
+
+//   myButton.addEventListener("click", function () {
+//     // Remove focus from the button
+//     myButton.blur();
+//   });
+// });
