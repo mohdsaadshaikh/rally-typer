@@ -9,13 +9,13 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
+
 const IPINFO_TOKEN = "ca2e0ce571e7c3";
 
 const WorldMapSection = () => {
   const [markers, setMarkers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch players + convert IP to coordinates
   useEffect(() => {
     const fetchActivePlayers = async () => {
       try {
@@ -24,35 +24,41 @@ const WorldMapSection = () => {
 
         const ipList = snapshot.docs
           .map((doc) => doc.data().ip)
-          .filter((ip) => ip && ip !== "unknown");
+          .filter((ip) => ip && ip !== "unknown" && ip !== null);
 
-        // Remove duplicates
-        const uniqueIps = [...new Set(ipList)];
+        const uniqueIps = [...new Set(ipList)].slice(0, 20); // Max 20 for free tier
 
-        // Fetch coordinates for each IP
+        // Main IPinfo endpoint use karo (full data with loc)
         const coordsPromises = uniqueIps.map(async (ip) => {
           try {
-            // const res = await fetch(`http://ip-api.com/json/${ip}`);
+            // Main endpoint: https://ipinfo.io/{ip}/json?token=TOKEN
             const res = await fetch(
               `https://ipinfo.io/${ip}/json?token=${IPINFO_TOKEN}`
             );
             if (!res.ok) return null;
+
             const data = await res.json();
-            if (data.status === "success") {
+            if (data.loc) {
+              const [lat, lon] = data.loc.split(",").map(parseFloat);
               return {
-                name: data.city || data.country,
-                coordinates: [data.lon, data.lat],
+                name: data.city || data.country || "Unknown",
+                coordinates: [lon, lat], // [lon, lat] format for Marker
               };
             }
           } catch (e) {
-            console.warn("IP lookup failed:", ip, e);
+            console.warn("IP lookup failed for", ip, ":", e);
           }
           return null;
         });
 
-        const coords = (await Promise.all(coordsPromises)).filter(Boolean);
+        // Sequential calls for rate limit (1 req/sec)
+        const coords = [];
+        for (const promise of coordsPromises) {
+          const result = await promise;
+          if (result) coords.push(result);
+          await new Promise((r) => setTimeout(r, 1000)); // 1 sec delay
+        }
 
-        // Limit to 30 markers for performance
         setMarkers(coords.slice(0, 30));
         setLoading(false);
       } catch (error) {
@@ -63,27 +69,27 @@ const WorldMapSection = () => {
 
     fetchActivePlayers();
 
-    // Refresh every 30 seconds
-    const interval = setInterval(fetchActivePlayers, 30000);
+    // Refresh every 2 minutes (120 sec)
+    const interval = setInterval(fetchActivePlayers, 120000);
     return () => clearInterval(interval);
   }, []);
 
   return (
     <section className="py-20 px-8 bg-black">
-      <div className="container mx-auto max-w-full bg-brand-dark-1 rounded-3xl">
-        {/* Title */}
+      <div className="container mx-auto max-w-full rounded-4xl bg-brand-dark-1 ">
         <div className="text-center mb-20">
-          <h2 className="text-brand text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-brand text-3xl md:text-4xl font-bold mb-4 pt-20">
             {loading
               ? "Loading Live Players..."
-              : `Live Players: ${markers.length}`}
+              : markers.length > 0
+              ? `Live Players: ${markers.length} Locations`
+              : "No Active Players Yet"}
           </h2>
           <p className="text-gray-100 text-sm">
             Real-time typing races happening globally. Join the rally!
           </p>
         </div>
 
-        {/* World Map */}
         <div className="relative w-full overflow-hidden">
           <ComposableMap
             projection="geoMercator"
@@ -119,7 +125,7 @@ const WorldMapSection = () => {
                     fill="#F25A06"
                     fillOpacity={0.3}
                     className="animate-ping"
-                    style={{ animationDelay: `${index * 0.1}s` }}
+                    style={{ animationDelay: `${index * 0.2}s` }}
                   />
                   <image
                     href="/images/marker.svg"
@@ -137,7 +143,7 @@ const WorldMapSection = () => {
           </ComposableMap>
 
           {loading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+            <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-3xl">
               <div className="text-white">Fetching live players...</div>
             </div>
           )}

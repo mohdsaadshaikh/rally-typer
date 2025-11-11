@@ -217,17 +217,14 @@ const LeaderboardSection = () => {
             )}
 
             {leaderboardData.slice(0, 20).map((player, index) => (
-              <div
-                key={player.id}
-                className="grid grid-cols-5 gap-8 px-8 py-5 bg-brand-dark-4 rounded-lg hover:bg-brand-dark-2 transition-colors duration-200 items-center"
-              >
+              <div className="grid grid-cols-5 items-center px-8 py-5 bg-brand-dark-4 rounded-lg hover:bg-brand-dark-2 transition-colors duration-200">
                 <div className="text-white font-bold text-lg">
                   {String(index + 1).padStart(2, "0")}
                 </div>
 
                 {/* Username + Avatar */}
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-full overflow-hidden ring-2 ring-white/30 flex items-center justify-center bg-transparent">
+                  <div className="w-14 h-14 rounded-full overflow-hidden ring-2 ring-white/30 bg-transparent">
                     <img
                       src={player.avatar}
                       alt={player.username}
@@ -235,7 +232,7 @@ const LeaderboardSection = () => {
                       onError={(e) => (e.target.src = FALLBACK_AVATAR)}
                     />
                   </div>
-                  <span className="text-white font-medium text-lg truncate">
+                  <span className="text-white font-medium text-lg">
                     {shortName(player.username, 12)}
                   </span>
                 </div>
