@@ -9,24 +9,13 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
-
-// Cache to avoid repeated API calls
-const ipCache = new Map();
-const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+const IPINFO_TOKEN = "ca2e0ce571e7c3";
 
 const WorldMapSection = () => {
   const [markers, setMarkers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchWithDelay = async (promises, delay = 150) => {
-    const results = [];
-    for (const promise of promises) {
-      results.push(await promise);
-      await new Promise((r) => setTimeout(r, delay)); // 150ms delay = ~6 req/sec
-    }
-    return results;
-  };
-
+  // Fetch players + convert IP to coordinates
   useEffect(() => {
     const fetchActivePlayers = async () => {
       try {
@@ -35,32 +24,25 @@ const WorldMapSection = () => {
 
         const ipList = snapshot.docs
           .map((doc) => doc.data().ip)
-          .filter((ip) => ip && ip !== "unknown" && ip !== null);
+          .filter((ip) => ip && ip !== "unknown");
 
-        const uniqueIps = [...new Set(ipList)].slice(0, 25); // Max 25 to avoid ban
+        // Remove duplicates
+        const uniqueIps = [...new Set(ipList)];
 
-        const now = Date.now();
-
-        const coordsPromises = uniqueIps.map((ip) => async () => {
-          // Check cache
-          const cached = ipCache.get(ip);
-          if (cached && now - cached.timestamp < CACHE_DURATION) {
-            return cached.data;
-          }
-
+        // Fetch coordinates for each IP
+        const coordsPromises = uniqueIps.map(async (ip) => {
           try {
+            // const res = await fetch(`http://ip-api.com/json/${ip}`);
             const res = await fetch(
-              `https://ip-api.com/json/${ip}?fields=status,country,city,lat,lon`
+              `https://ipinfo.io/${ip}/json?token=${IPINFO_TOKEN}`
             );
             if (!res.ok) return null;
             const data = await res.json();
             if (data.status === "success") {
-              const result = {
+              return {
                 name: data.city || data.country,
                 coordinates: [data.lon, data.lat],
               };
-              ipCache.set(ip, { data: result, timestamp: now });
-              return result;
             }
           } catch (e) {
             console.warn("IP lookup failed:", ip, e);
@@ -68,42 +50,41 @@ const WorldMapSection = () => {
           return null;
         });
 
-        const coords = await fetchWithDelay(
-          coordsPromises.map((p) => p()),
-          180 // 180ms = 5.5 req/sec < 45/min
-        );
+        const coords = (await Promise.all(coordsPromises)).filter(Boolean);
 
-        const validCoords = coords.filter(Boolean);
-        setMarkers(validCoords);
+        // Limit to 30 markers for performance
+        setMarkers(coords.slice(0, 30));
         setLoading(false);
       } catch (error) {
-        console.error("Error:", error);
+        console.error("Error fetching players:", error);
         setLoading(false);
       }
     };
 
     fetchActivePlayers();
-    const interval = setInterval(fetchActivePlayers, 60000); // 1 min
+
+    // Refresh every 30 seconds
+    const interval = setInterval(fetchActivePlayers, 30000);
     return () => clearInterval(interval);
   }, []);
 
   return (
     <section className="py-20 px-8 bg-black">
-      <div className="container mx-auto max-w-full rounded-4xl bg-brand-dark-1 p-20">
+      <div className="container mx-auto max-w-full bg-brand-dark-1 rounded-3xl">
+        {/* Title */}
         <div className="text-center mb-20">
           <h2 className="text-brand text-3xl md:text-4xl font-bold mb-4">
             {loading
               ? "Loading Live Players..."
-              : markers.length > 0
-              ? `Live in ${markers.length} Locations`
-              : "No Active Players"}
+              : `Live Players: ${markers.length}`}
           </h2>
           <p className="text-gray-100 text-sm">
-            Real-time typing races happening globallyy
+            Real-time typing races happening globally. Join the rally!
           </p>
         </div>
 
-        <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl">
+        {/* World Map */}
+        <div className="relative w-full overflow-hidden">
           <ComposableMap
             projection="geoMercator"
             projectionConfig={{ scale: 150, center: [0, 25] }}
@@ -129,6 +110,7 @@ const WorldMapSection = () => {
               }
             </Geographies>
 
+            {/* Dynamic Markers */}
             {markers.map((marker, index) => (
               <Marker key={index} coordinates={marker.coordinates}>
                 <g>
