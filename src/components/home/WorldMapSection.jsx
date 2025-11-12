@@ -4,12 +4,11 @@ import {
   Geographies,
   Geography,
   Marker,
-} from "react-simple-maps";
+} from "@vnedyalk0v/react19-simple-maps";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
-const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
-
+const geoUrl = "https://unpkg.com/world-atlas@2/countries-110m.json";
 const IPINFO_TOKEN = "ca2e0ce571e7c3";
 
 const WorldMapSection = () => {
@@ -28,7 +27,6 @@ const WorldMapSection = () => {
 
         const uniqueIps = [...new Set(ipList)].slice(0, 20); // Max 20 for free tier
 
-        // Main IPinfo endpoint use karo (full data with loc)
         const coordsPromises = uniqueIps.map(async (ip) => {
           try {
             // Main endpoint: https://ipinfo.io/{ip}/json?token=TOKEN
@@ -75,10 +73,10 @@ const WorldMapSection = () => {
   }, []);
 
   return (
-    <section className="py-20 px-8 bg-black">
+    <section className="md:py-20 py-8 px-8 bg-black">
       <div className="container mx-auto max-w-full rounded-4xl bg-brand-dark-1 ">
-        <div className="text-center mb-20">
-          <h2 className="text-brand text-3xl md:text-4xl font-bold mb-4 pt-20">
+        <div className="text-center md:mb-20 mb-8">
+          <h2 className="text-brand text-3xl md:text-4xl font-bold mb-4 md:pt-20 pt-8">
             {loading
               ? "Loading Live Players..."
               : markers.length > 0

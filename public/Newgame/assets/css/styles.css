@@ -237,7 +237,6 @@ body {
   width: 100%;
   height: 100%;
   padding-top: 4vh;
-
   font-family: Monospace;
   text-align: center;
   color: #d0d0d0;
@@ -249,19 +248,10 @@ body {
   gap: 10%;
 }
 
-.main-menu .difficulty-box {
-  width: 896px;
-  height: full;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
+/* === BANNER === */
 .choose-difficulty-banner {
   width: 100%;
   max-width: 800px;
-  /* margin: 0 auto 4vh auto; */
-  /* padding: 2rem 2rem; */
   margin-top: 50px;
   text-align: center;
   background-image: url("/images/choose-difficulty.svg");
@@ -275,45 +265,76 @@ body {
 }
 
 .choose-difficulty-banner h2 {
-  margin: 0;
-  margin-bottom: 25px;
+  margin: 0 0 25px 0;
   font-size: 2.5rem;
   font-weight: 900;
   text-transform: uppercase;
   color: white;
   font-family: monospace;
-  /* font-family: "Nunito"; */
-
   text-shadow: 0px 3.85px 0px rgba(0, 0, 0, 0.15);
   letter-spacing: 1px;
 }
 
+/* === DIFFICULTY BOX === */
+.difficulty-box {
+  width: 100%;
+  max-width: 896px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 0 16px;
+}
+
+.difficulty-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  justify-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+/* Small screens (≥640px) → 2 columns */
+@media (min-width: 540px) {
+  .difficulty-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}
+
+/* Medium screens (≥768px) → 3 columns */
+@media (min-width: 860px) {
+  .difficulty-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+  }
+}
+
+/* === BUTTONS === */
 .main-menu .difficulty-btn {
   width: 150px;
   height: 150px;
-  aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  margin: 2vh auto;
-
+  margin: 0;
   border: 2px dashed #fffaec;
   border-radius: 12px;
-
   background: #2b231b;
   color: #cccccc;
-
   font-family: monospace;
   font-size: 2rem;
   font-weight: 900;
   text-transform: uppercase;
-
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .main-menu .difficulty-btn:hover {
-  cursor: pointer;
   border-color: #f25a06;
   transform: scale(1.05);
 }

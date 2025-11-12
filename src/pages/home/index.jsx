@@ -12,7 +12,7 @@ const HomePage = () => {
       <HeroSection />
       <iframe
         allow="fullscreen"
-        className="w-full h-[90vh] border-0 bg-black"
+        className="w-full h-[800px] border-0 bg-black"
         // src="https://rallytyper.com/Newgame"
         src="/Newgame/index.html"
         title="New Game "

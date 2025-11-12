@@ -63,24 +63,26 @@ const HeroSection = () => {
           {/* Left Content */}
           <div className="text-white space-y-10 mt-20">
             <h1
-              className="text-5xl lg:text-7xl space-y-2.5 font-medium leading-[1.1]"
+              className="text-5xl sm:text-7xl space-y-2.5 font-medium leading-[1.1]"
               style={{ fontFamily: "Anton, sans-serif" }}
             >
-              <span className="text-brand block">Master Your Typing</span>
-              <span className="text-brand flex items-center gap-2">
+              <span className="text-brand block max-lg:text-center">
+                Master Your Typing <br />
                 Skills with RallyTyper
                 <img
                   src="/images/tyre.svg"
                   alt="Tyre"
-                  className="inline-block w-14 h-14 lg:w-22 lg:h-22"
+                  className="inline-block w-14 h-14 sm:w-22 sm:h-22 ml-3 mb-1"
                 />
               </span>
-              <span className="text-white block mt-3">
+              {/* <span className="text-brand flex items-center gap-2">
+              </span> */}
+              <span className="text-white block mt-3 max-lg:text-center">
                 The Ultimate Typing Game!
               </span>
             </h1>
             <p
-              className="text-lg lg:text-2xl text-white/90 max-w-2xl leading-11"
+              className="text-lg lg:text-2xl text-white/90 lg:max-w-2xl w-full leading-11 max-lg:text-center"
               style={{ fontFamily: "ADLaM Display, sans-serif" }}
             >
               Get ready for a high-speed challenge where your typing skills
@@ -198,31 +200,41 @@ const HeroSection = () => {
                 return (
                   <div
                     key={index}
-                    className={`flex justify-between items-center px-6 py-2 rounded-xl hover:brightness-110 transition-all ${bgColor}`}
+                    className={`grid grid-cols-[1.5fr_1fr_1fr] gap-2 px-6 py-2 rounded-xl hover:brightness-110 transition-all ${bgColor}`}
                     style={{ fontFamily: "Nunito, sans-serif" }}
                   >
-                    <div className="flex items-center gap-2">
-                      <div className="w-10 h-10 rounded-full overflow-hidden bg-brand-dark-4 flex items-center justify-center">
+                    {/* USERNAME + FLAG (Ek Line) */}
+                    <div className="flex items-center gap-2 flex-nowrap">
+                      {/* Avatar */}
+                      <div className="w-10 h-10 rounded-full overflow-hidden bg-brand-dark-4 flex items-center justify-center flex-shrink-0">
                         <img
                           src={player.avatar || "/images/avatar.svg"}
                           alt={player.username}
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <span className="text-white font-bold text-base">
-                        {shortName(player.username)}
-                      </span>
-                      <img
-                        src={getFlagUrl(player.flagCode)}
-                        alt={player.flagCode}
-                        className="w-8 h-5 object-cover rounded"
-                        onError={(e) => (e.target.src = "/images/earth.png")}
-                      />
+
+                      {/* Username + Flag */}
+                      <div className="flex items-center gap-1 flex-nowrap min-w-0">
+                        <span className="text-white font-bold text-base truncate">
+                          {shortName(player.username)}
+                        </span>
+                        <img
+                          src={getFlagUrl(player.flagCode)}
+                          alt={player.flagCode}
+                          className="w-6 h-4 object-cover rounded flex-shrink-0"
+                          onError={(e) => (e.target.src = "/images/earth.png")}
+                        />
+                      </div>
                     </div>
+
+                    {/* Accuracy */}
                     <div className="text-center text-white font-bold text-base">
                       {player.accuracy}
                     </div>
-                    <div className="text-center text-white font-bold text-base ">
+
+                    {/* WPM */}
+                    <div className="text-center text-white font-bold text-base">
                       {player.wpm}
                     </div>
                   </div>

@@ -7,6 +7,11 @@ import Blogs from "@/pages/blogs";
 import BlogDetails from "@/pages/blogs/blogDetails";
 import HomePage from "@/pages/home";
 import { createBrowserRouter } from "react-router-dom";
+import Dashboard from "@/pages/admin/Dashboard";
+import InsertBlog from "@/pages/admin/InsertBlog";
+import EditBlog from "@/pages/admin/EditBlog";
+import Login from "@/pages/admin/login/Login";
+import Protectedroute from "@/pages/admin/Protectedroute";
 
 export const router = createBrowserRouter([
   {
@@ -26,11 +31,11 @@ export const router = createBrowserRouter([
         path: "blogs/:slug",
         element: <BlogDetails />,
       },
-      {
-        path: "post",
-        element: <div className="text-white p-20">Post on X - Coming Soon</div>,
-      },
     ],
+  },
+  {
+    path: "/admin/login",
+    element: <Login />,
   },
   {
     path: "/auth",
@@ -49,5 +54,22 @@ export const router = createBrowserRouter([
         element: <ForgotPasswordPage />,
       },
     ],
+  },
+
+  {
+    path: "/admin-blog-dashboard",
+    element: (
+      <Protectedroute>
+        <Dashboard />
+      </Protectedroute>
+    ),
+  },
+  {
+    path: "/admin-blog-dashboard/insertblog",
+    element: <InsertBlog />,
+  },
+  {
+    path: "/admin-blog-dashboard/editblog/:id",
+    element: <EditBlog />,
   },
 ]);

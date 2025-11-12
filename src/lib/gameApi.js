@@ -79,148 +79,148 @@
 //   }
 // };
 // lib/gameApi.js
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "./firebase";
+// import { doc, getDoc, setDoc } from "firebase/firestore";
+// import { db } from "./firebase";
 
-const difficultyNames = ["noob", "easy", "normal", "hard", "advanced"];
+// const difficultyNames = ["noob", "easy", "normal", "hard", "advanced"];
 
-async function getPlayerId() {
-  let playerId = localStorage.getItem("playerId");
-  if (!playerId) {
-    let isUnique = false;
-    let attempt = 0;
-    while (!isUnique) {
-      const len = 9 + attempt;
-      playerId =
-        "player_" +
-        Math.random()
-          .toString(36)
-          .slice(2, 2 + len);
-      const ref = doc(db, "players", playerId);
-      const snap = await getDoc(ref);
-      if (!snap.exists()) {
-        isUnique = true;
-        await setDoc(ref, { createdAt: Date.now() });
-        localStorage.setItem("playerId", playerId);
-      }
-      attempt++;
-    }
-  }
-  return playerId;
-}
+// async function getPlayerId() {
+//   let playerId = localStorage.getItem("playerId");
+//   if (!playerId) {
+//     let isUnique = false;
+//     let attempt = 0;
+//     while (!isUnique) {
+//       const len = 9 + attempt;
+//       playerId =
+//         "player_" +
+//         Math.random()
+//           .toString(36)
+//           .slice(2, 2 + len);
+//       const ref = doc(db, "players", playerId);
+//       const snap = await getDoc(ref);
+//       if (!snap.exists()) {
+//         isUnique = true;
+//         await setDoc(ref, { createdAt: Date.now() });
+//         localStorage.setItem("playerId", playerId);
+//       }
+//       attempt++;
+//     }
+//   }
+//   return playerId;
+// }
 
-export const submitGameResults = async (results) => {
-  try {
-    const {
-      gwam,
-      accuracy,
-      time,
-      characters,
-      mistakes,
-      difficulty: diffIndex,
-    } = results;
+// export const submitGameResults = async (results) => {
+//   try {
+//     const {
+//       gwam,
+//       accuracy,
+//       time,
+//       characters,
+//       mistakes,
+//       difficulty: diffIndex,
+//     } = results;
 
-    // User data from sessionStorage (React se aaya)
-    const userDataStr = sessionStorage.getItem("gameUserData");
-    const userData = userDataStr ? JSON.parse(userDataStr) : {};
-    const {
-      username = "Player",
-      country = "United States",
-      countryCode = "US",
-      playerId: storedPlayerId,
-    } = userData;
+//     // User data from sessionStorage (React se aaya)
+//     const userDataStr = sessionStorage.getItem("gameUserData");
+//     const userData = userDataStr ? JSON.parse(userDataStr) : {};
+//     const {
+//       username = "Player",
+//       country = "United States",
+//       countryCode = "US",
+//       playerId: storedPlayerId,
+//     } = userData;
 
-    // Validate difficulty
-    const difficultyIndex = Number(diffIndex);
-    if (isNaN(difficultyIndex) || difficultyIndex < 0 || difficultyIndex > 4) {
-      throw new Error("Invalid difficulty level");
-    }
-    const difficulty = difficultyNames[difficultyIndex];
+//     // Validate difficulty
+//     const difficultyIndex = Number(diffIndex);
+//     if (isNaN(difficultyIndex) || difficultyIndex < 0 || difficultyIndex > 4) {
+//       throw new Error("Invalid difficulty level");
+//     }
+//     const difficulty = difficultyNames[difficultyIndex];
 
-    const playerId = storedPlayerId || (await getPlayerId());
+//     const playerId = storedPlayerId || (await getPlayerId());
 
-    const now = new Date();
-    const formattedDate = `${
-      now.getMonth() + 1
-    }/${now.getDate()}/${now.getFullYear()}`;
+//     const now = new Date();
+//     const formattedDate = `${
+//       now.getMonth() + 1
+//     }/${now.getDate()}/${now.getFullYear()}`;
 
-    // Final data to save
-    const leaderboardData = {
-      username,
-      score: gwam, // WPM
-      accuracy, // Accuracy in %
-      time: Math.round(time * 100) / 100,
-      characters,
-      mistakes,
-      date: formattedDate,
-      difficulty,
-      country: countryCode,
-      playerId,
-      submittedAt: Date.now(),
-    };
+//     // Final data to save
+//     const leaderboardData = {
+//       username,
+//       score: gwam, // WPM
+//       accuracy, // Accuracy in %
+//       time: Math.round(time * 100) / 100,
+//       characters,
+//       mistakes,
+//       date: formattedDate,
+//       difficulty,
+//       country: countryCode,
+//       playerId,
+//       submittedAt: Date.now(),
+//     };
 
-    const docRef = doc(db, "leaderboard", difficulty, "players", playerId);
-    const docSnap = await getDoc(docRef);
+//     const docRef = doc(db, "leaderboard", difficulty, "players", playerId);
+//     const docSnap = await getDoc(docRef);
 
-    if (docSnap.exists() && docSnap.data().score >= gwam) {
-      return { success: false, message: "Pehle wala score zyada hai!" };
-    }
+//     if (docSnap.exists() && docSnap.data().score >= gwam) {
+//       return { success: false, message: "Pehle wala score zyada hai!" };
+//     }
 
-    await setDoc(docRef, leaderboardData);
-    localStorage.setItem("username", username);
-    localStorage.setItem("country", country);
-    localStorage.setItem("countryCode", countryCode);
+//     await setDoc(docRef, leaderboardData);
+//     localStorage.setItem("username", username);
+//     localStorage.setItem("country", country);
+//     localStorage.setItem("countryCode", countryCode);
 
-    console.log("Score + Accuracy saved!", leaderboardData);
-    return { success: true, data: leaderboardData };
-  } catch (error) {
-    console.error("Submit failed:", error);
-    throw error;
-  }
-};
-/**
- * Get player's best scores
- */
-export async function getPlayerBestScores(playerId) {
-  try {
-    const difficulties = ["noob", "easy", "normal", "hard", "advanced"];
-    const scores = {};
+//     console.log("Score + Accuracy saved!", leaderboardData);
+//     return { success: true, data: leaderboardData };
+//   } catch (error) {
+//     console.error("Submit failed:", error);
+//     throw error;
+//   }
+// };
+// /**
+//  * Get player's best scores
+//  */
+// export async function getPlayerBestScores(playerId) {
+//   try {
+//     const difficulties = ["noob", "easy", "normal", "hard", "advanced"];
+//     const scores = {};
 
-    for (const difficulty of difficulties) {
-      const docRef = doc(db, "leaderboard", difficulty, "players", playerId);
-      const docSnap = await getDoc(docRef);
+//     for (const difficulty of difficulties) {
+//       const docRef = doc(db, "leaderboard", difficulty, "players", playerId);
+//       const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
-        scores[difficulty] = docSnap.data();
-      }
-    }
+//       if (docSnap.exists()) {
+//         scores[difficulty] = docSnap.data();
+//       }
+//     }
 
-    return scores;
-  } catch (error) {
-    console.error("Error fetching scores:", error);
-    return {};
-  }
-}
+//     return scores;
+//   } catch (error) {
+//     console.error("Error fetching scores:", error);
+//     return {};
+//   }
+// }
 
-/**
- * Get leaderboard data for specific difficulty
- */
-export async function getLeaderboard(difficulty, limit = 10) {
-  try {
-    const difficultyNames = ["noob", "easy", "normal", "hard", "advanced"];
-    const difficultyName = difficultyNames[difficulty] || "normal";
+// /**
+//  * Get leaderboard data for specific difficulty
+//  */
+// export async function getLeaderboard(difficulty, limit = 10) {
+//   try {
+//     const difficultyNames = ["noob", "easy", "normal", "hard", "advanced"];
+//     const difficultyName = difficultyNames[difficulty] || "normal";
 
-    // Note: Firestore mein orderBy aur limit ke liye query use karni hogi
-    // Yeh basic example hai - proper implementation ke liye Firestore queries use karein
+//     // Note: Firestore mein orderBy aur limit ke liye query use karni hogi
+//     // Yeh basic example hai - proper implementation ke liye Firestore queries use karein
 
-    return {
-      success: true,
-      difficulty: difficultyName,
-      message:
-        "Leaderboard data fetch karne ke liye proper query implement karein",
-    };
-  } catch (error) {
-    console.error("Leaderboard fetch error:", error);
-    throw error;
-  }
-}
+//     return {
+//       success: true,
+//       difficulty: difficultyName,
+//       message:
+//         "Leaderboard data fetch karne ke liye proper query implement karein",
+//     };
+//   } catch (error) {
+//     console.error("Leaderboard fetch error:", error);
+//     throw error;
+//   }
+// }

@@ -98,8 +98,7 @@ const LeaderboardSection = () => {
   return (
     <section className="py-20 px-8 bg-black" id="leaderboard-section">
       <div className="mx-auto max-w-6xl">
-        {/* Podium Section */}
-        <div className="bg-linear-to-r from-brand to-[#d94d05] py-8 text-center shadow-xl relative overflow-visible">
+        <div className="bg-linear-to-r from-brand to-[#d94d05] h-[465px] py-8 text-center shadow-xl relative overflow-visible">
           <h2
             className="text-white uppercase mb-16 font-black text-5xl"
             style={{
