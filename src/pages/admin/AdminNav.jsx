@@ -20,7 +20,7 @@ const AdminNav = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full px-8 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
+    <header className="sticky top-0 z-50 w-full sm:px-6 px-2 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
       <div className="flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
           <h1 className="text-2xl font-bold text-primary">Admin</h1>

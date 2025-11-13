@@ -58,7 +58,7 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen py-10 overflow-hidden">
-      <div className="mx-auto px-6 lg:px-18 relative z-10">
+      <div className="mx-auto px- sm:px-6 lg:px-18 relative z-10">
         <div className="grid lg:grid-cols-[1.5fr_1fr] gap-12 items-start">
           {/* Left Content */}
           <div className="text-white space-y-10 mt-20">
@@ -82,7 +82,7 @@ const HeroSection = () => {
               </span>
             </h1>
             <p
-              className="text-lg lg:text-2xl text-white/90 lg:max-w-2xl w-full leading-11 max-lg:text-center"
+              className="text-lg lg:text-2xl text-white/90 lg:max-w-2xl w-full leading-11 max-lg:text-center max-lg:px-3"
               style={{ fontFamily: "ADLaM Display, sans-serif" }}
             >
               Get ready for a high-speed challenge where your typing skills
@@ -92,7 +92,7 @@ const HeroSection = () => {
           </div>
 
           {/* Right Content - Leaderboard */}
-          <div className="bg-linear-to-b from-[#CF4B03] to-brand rounded-2xl px-6 py-4 shadow-2xl">
+          <div className="bg-linear-to-b from-[#CF4B03] to-brand rounded-2xl px-2 sm:px-6 py-4 shadow-2xl">
             <div className="text-center mb-2">
               <h2
                 className="text-white text-2xl lg:text-4xl text-shadow-lg font-bold mb-16"
@@ -179,7 +179,7 @@ const HeroSection = () => {
 
             <div className="space-y-1">
               <div
-                className="grid grid-cols-[1.5fr_1fr_1fr] gap-4 bg-brand-dark-4 px-8 py-3 mb-3 rounded-xl text-white font-bold text-sm uppercase"
+                className="grid grid-cols-[1.5fr_1fr_1fr] gap-4 bg-brand-dark-4 px-3 sm:px-8 py-3 mb-3 rounded-xl text-white font-bold text-sm uppercase"
                 style={{ fontFamily: "Nunito, sans-serif" }}
               >
                 <div>USERNAME</div>
@@ -200,10 +200,9 @@ const HeroSection = () => {
                 return (
                   <div
                     key={index}
-                    className={`grid grid-cols-[1.5fr_1fr_1fr] gap-2 px-6 py-2 rounded-xl hover:brightness-110 transition-all ${bgColor}`}
+                    className={`grid grid-cols-[1.5fr_1fr_1fr] gap-2 px-3 sm:px-6 py-2 rounded-xl hover:brightness-110 transition-all ${bgColor}`}
                     style={{ fontFamily: "Nunito, sans-serif" }}
                   >
-                    {/* USERNAME + FLAG (Ek Line) */}
                     <div className="flex items-center gap-2 flex-nowrap">
                       {/* Avatar */}
                       <div className="w-10 h-10 rounded-full overflow-hidden bg-brand-dark-4 flex items-center justify-center flex-shrink-0">
@@ -229,12 +228,12 @@ const HeroSection = () => {
                     </div>
 
                     {/* Accuracy */}
-                    <div className="text-center text-white font-bold text-base">
+                    <div className="text-center text-white font-bold text-sm sm:text-base">
                       {player.accuracy}
                     </div>
 
                     {/* WPM */}
-                    <div className="text-center text-white font-bold text-base">
+                    <div className="text-center my-auto text-white font-bold text-sm sm:text-base">
                       {player.wpm}
                     </div>
                   </div>

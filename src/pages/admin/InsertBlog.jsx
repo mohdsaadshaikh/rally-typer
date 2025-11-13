@@ -162,7 +162,7 @@ const InsertBlog = () => {
   return (
     <div className="min-h-screen bg-background">
       <AdminNav />
-      <main className="max-w-5xl mx-auto py-8 px-4">
+      <main className="max-w-5xl mx-auto py-8 sm:px-4">
         <Card>
           <CardHeader>
             <CardTitle className="text-3xl font-bold">
@@ -287,7 +287,7 @@ const InsertBlog = () => {
               </div>
 
               {/* Buttons */}
-              <div className="flex gap-4 mt-16">
+              <div className="flex gap-4 mt-20">
                 <Button type="submit" disabled={isSubmitting}>
                   {isSubmitting && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />

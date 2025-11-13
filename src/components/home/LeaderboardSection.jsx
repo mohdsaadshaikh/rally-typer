@@ -73,8 +73,16 @@ const LeaderboardSection = () => {
     avatar: p.avatar,
     position: i + 1,
     trophyColor: i === 0 ? "#FFD700" : i === 1 ? "#C0C0C0" : "#CD7F32",
-    trophySize: i === 0 ? 48 : 32,
-    size: i === 0 ? "w-40 h-40" : "w-28 h-28",
+    // trophySize: i === 0 ? 48 : 32,
+    trophySize:
+      i === 0
+        ? "[@media(min-width:680px)]:w-12 [@media(min-width:680px)]:h-12 w-8 h-8"
+        : "[@media(min-width:680px)]:w-8 [@media(min-width:680px)]:h-8 w-6 h-6",
+
+    size:
+      i === 0
+        ? "w-40 h-40 max-[520px]:w-28 max-[520px]:h-28"
+        : "w-28 h-28 max-[520px]:w-20 max-[520px]:h-20",
     textSize: i === 0 ? "text-2xl" : "text-xl",
     placement:
       i === 0
@@ -96,11 +104,11 @@ const LeaderboardSection = () => {
   };
 
   return (
-    <section className="py-20 px-8 bg-black" id="leaderboard-section">
-      <div className="mx-auto max-w-6xl">
-        <div className="bg-linear-to-r from-brand to-[#d94d05] h-[465px] py-8 text-center shadow-xl relative overflow-visible">
+    <section className="py-20 md:px-8 bg-black" id="leaderboard-section">
+      <div className="md:mx-auto max-w-6xl">
+        <div className="bg-linear-to-r from-brand to-[#d94d05] h-[465px] max-[520px]:h-96 py-8 text-center shadow-xl relative overflow-visible">
           <h2
-            className="text-white uppercase mb-16 font-black text-5xl"
+            className="text-white uppercase mb-16 font-black text-5xl max-[450px]:text-3xl"
             style={{
               fontFamily: "Nunito, sans-serif",
               fontWeight: 900,
@@ -115,11 +123,11 @@ const LeaderboardSection = () => {
           {error && <div className="text-red-400 text-xl">{error}</div>}
 
           {!loading && !error && topThree.length > 0 && (
-            <div className="relative w-full h-64 flex items-center justify-center select-none">
+            <div className="relative w-full h-64 flex items-center justify-center select-none ">
               <img
                 src="/images/top-players.svg"
                 alt="top players background"
-                className="absolute inset-0 w-full h-full object-contain"
+                className="absolute max-[680px]:hidden inset-0 sm:w-full w-3/4 mx-auto h-full object-contain"
               />
               <div className="relative flex -top-38 justify-center items-center gap-4 w-full max-w-2xl z-10">
                 {topThree.map((player) => (
@@ -146,17 +154,17 @@ const LeaderboardSection = () => {
                     </div>
                     <div className="mt-2">
                       <Trophy
-                        size={player.trophySize}
+                        className={player.trophySize}
                         fill={player.trophyColor}
                         color={player.trophyColor}
                       />
                     </div>
                     <div
-                      className={`${player.nameColor} font-bold text-base mt-4`}
+                      className={`${player.nameColor} font-bold text-sm md:text-base mt-4`}
                     >
                       {shortName(player.name)}
                     </div>
-                    <div className="text-white text-sm">
+                    <div className="text-white text-xs md:text-sm">
                       {Math.round(player.score)} WPM
                     </div>
                   </div>
@@ -166,8 +174,8 @@ const LeaderboardSection = () => {
           )}
         </div>
 
-        <div className="bg-brand-dark-3 p-10">
-          <div className="grid grid-cols-5 max-w-5xl mx-auto my-10 gap-6 relative z-10">
+        <div className="bg-brand-dark-3 md:p-10 p-3">
+          <div className="grid grid-cols-5 max-w-5xl mx-auto my-10 md:gap-6 gap-3 relative z-10">
             {difficulties.map((difficulty) => (
               <DifficultyCard
                 key={difficulty}
@@ -191,20 +199,20 @@ const LeaderboardSection = () => {
           </div>
 
           <div className="space-y-4">
-            <div className="grid grid-cols-5 gap-8 p-6 bg-brand-dark-2 rounded-lg">
-              <div className="text-white text-lg font-medium uppercase">
+            <div className="grid grid-cols-5 gap-8 md:p-6 p-4 bg-brand-dark-2 rounded-lg">
+              <div className="text-white text-[10px] [@media(min-width:520px)]:text-sm md:text-lg font-medium uppercase">
                 Position
               </div>
-              <div className="text-white text-lg font-medium uppercase">
+              <div className="text-white text-[10px] [@media(min-width:520px)]:text-sm md:text-lg font-medium uppercase">
                 Username
               </div>
-              <div className="text-center text-white text-lg font-medium uppercase">
+              <div className="text-center text-white text-[10px] [@media(min-width:520px)]:text-sm md:text-lg font-medium uppercase">
                 Country
               </div>
-              <div className="text-center text-white text-lg font-medium uppercase">
+              <div className="text-center text-white text-[10px] [@media(min-width:520px)]:text-sm md:text-lg font-medium uppercase">
                 Accuracy
               </div>
-              <div className="text-center text-white text-lg font-medium uppercase">
+              <div className="text-center text-white text-[10px] [@media(min-width:520px)]:text-sm md:text-lg font-medium uppercase">
                 WPM
               </div>
             </div>
@@ -216,14 +224,14 @@ const LeaderboardSection = () => {
             )}
 
             {leaderboardData.slice(0, 20).map((player, index) => (
-              <div className="grid grid-cols-5 items-center px-8 py-5 bg-brand-dark-4 rounded-lg hover:bg-brand-dark-2 transition-colors duration-200">
-                <div className="text-white font-bold text-lg">
+              <div className="[@media(min-width:600px)]:grid [@media(min-width:600px)]:grid-cols-5 flex justify-between items-center md:px-8 md:py-5 px-3 py-2 bg-brand-dark-4 rounded-lg hover:bg-brand-dark-2 transition-colors duration-200">
+                <div className="text-white font-bold sm:text-lg text-sm">
                   {String(index + 1).padStart(2, "0")}
                 </div>
 
                 {/* Username + Avatar */}
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-full overflow-hidden ring-2 ring-white/30 bg-transparent">
+                <div className="flex items-center gap-4 flex-nowrap">
+                  <div className="md:w-14 md:h-14 w-10 h-10 rounded-full overflow-hidden flex items-center shrink-0 justify-center bg-transparent">
                     <img
                       src={player.avatar}
                       alt={player.username}
@@ -231,7 +239,7 @@ const LeaderboardSection = () => {
                       onError={(e) => (e.target.src = FALLBACK_AVATAR)}
                     />
                   </div>
-                  <span className="text-white font-medium text-lg">
+                  <span className="text-white font-medium md:text-lg text-sm">
                     {shortName(player.username, 12)}
                   </span>
                 </div>
@@ -240,16 +248,16 @@ const LeaderboardSection = () => {
                   <img
                     src={getFlagUrl(player.country)}
                     alt={player.country}
-                    className="w-12 h-8 object-cover shadow-sm rounded"
+                    className="md:w-12 md:h-8 w-8 h-5 object-cover shadow-sm rounded"
                     onError={(e) => (e.target.src = "/images/earth.png")}
                   />
                 </div>
 
-                <div className="text-center text-white font-medium text-lg">
+                <div className="text-center text-white font-medium md:text-lg text-sm">
                   {player.accuracy ? `${Math.round(player.accuracy)}%` : "-"}
                 </div>
 
-                <div className="text-center text-white font-medium text-lg">
+                <div className="text-center text-white font-medium md:text-lg text-sm">
                   {Math.round(player.score)} WPM
                 </div>
               </div>

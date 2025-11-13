@@ -73,17 +73,13 @@ const WorldMapSection = () => {
   }, []);
 
   return (
-    <section className="md:py-20 py-8 px-8 bg-black">
+    <section className="md:py-20 py-8 sm:px-8 px-2 bg-black">
       <div className="container mx-auto max-w-full rounded-4xl bg-brand-dark-1 ">
         <div className="text-center md:mb-20 mb-8">
-          <h2 className="text-brand text-3xl md:text-4xl font-bold mb-4 md:pt-20 pt-8">
-            {loading
-              ? "Loading Live Players..."
-              : markers.length > 0
-              ? `Live Players: ${markers.length} Locations`
-              : "No Active Players Yet"}
+          <h2 className="text-brand text-xl sm:text-4xl font-bold mb-1 sm:mb-4 md:pt-20 pt-8 px-2 sm:px-5">
+            Typing Races Happening All Around the World
           </h2>
-          <p className="text-gray-100 text-sm">
+          <p className="text-gray-100 text-sm max-sm:px-2">
             Real-time typing races happening globally. Join the rally!
           </p>
         </div>

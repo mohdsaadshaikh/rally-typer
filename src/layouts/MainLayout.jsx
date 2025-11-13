@@ -5,7 +5,7 @@ import Footer from "@/components/common/Footer";
 
 const MainLayout = () => {
   return (
-    <div className="min-h-screen bg-brand-dark-1 relative">
+    <div className="min-h-screen bg-brand-dark-1 relative overflow-x-hidden">
       {/* Background Pattern - Spans entire layout */}
       <div
         className="fixed inset-0"

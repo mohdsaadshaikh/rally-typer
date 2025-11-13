@@ -52,7 +52,6 @@ const Login = () => {
       const result = await response.json();
 
       if (response.ok && result.user) {
-        // Set cookie (hardcoded as per your logic)
         cookies.set(
           "auth.session-token",
           "hardcode128941247124124812495429-0d-token-24112124124124",
@@ -78,7 +77,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 sm:px-4">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
