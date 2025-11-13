@@ -242,10 +242,16 @@ body {
   color: #d0d0d0;
   user-select: none;
   background: #1a130b;
-  display: flex;
+  display: flex !important; /* !important lagaya hai taake JavaScript override na kar sake */
   flex-direction: column;
   align-items: center;
   gap: 5%;
+}
+
+/* Jab menu hidden ho tab */
+.main-menu[style*="display: none"],
+.main-menu[style*="display:none"] {
+  display: none !important;
 }
 
 /* === BANNER === */
@@ -293,7 +299,7 @@ body {
   align-items: center;
   gap: 16px;
   width: 100%;
-  max-width: 900px;
+  max-width: 1000px;
 }
 
 /* Small screens (≥540px) */

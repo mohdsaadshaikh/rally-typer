@@ -40,7 +40,6 @@ const BlogDetails = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
-  console.log(blogData);
   if (loading) {
     return <Loader />;
   }
@@ -51,58 +50,65 @@ const BlogDetails = () => {
       style={{ fontFamily: "'Work Sans', sans-serif" }}
     >
       <div className="container mx-auto max-w-4xl px-6 py-16">
-        {/* Category + Back */}
-        <div className="flex justify-between items-center mb-6">
-          <span className="inline-block bg-brand text-white px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide">
-            Rally Typer
-          </span>
+        {blogData ? (
+          <>
+            <div className="flex justify-between items-center mb-6">
+              <span className="inline-block bg-brand text-white px-4 py-2 rounded-full text-sm font-semibold uppercase tracking-wide">
+                Rally Typer
+              </span>
 
-          <button
-            onClick={() => navigate("/blogs")}
-            className="flex items-center gap-2 text-white/70 hover:text-brand transition-colors duration-300 group"
-          >
-            <ArrowLeft
-              size={20}
-              className="group-hover:-translate-x-1 transition-transform duration-300"
-            />
-            <span className="font-medium">Back to Blogs</span>
-          </button>
-        </div>
+              <button
+                onClick={() => navigate("/blogs")}
+                className="flex items-center gap-2 text-white/70 hover:text-brand transition-colors duration-300 group"
+              >
+                <ArrowLeft
+                  size={20}
+                  className="group-hover:-translate-x-1 transition-transform duration-300"
+                />
+                <span className="font-medium">Back to Blogs</span>
+              </button>
+            </div>
 
-        <h1 className="text-white text-4xl md:text-5xl font-semibold mb-8 leading-tight">
-          {blogData?.title}
-        </h1>
+            <h1 className="text-white text-4xl md:text-5xl font-semibold mb-8 leading-tight">
+              {blogData?.title}
+            </h1>
 
-        <div className="flex flex-wrap items-center gap-6 mb-8 pb-8 border-b border-brand-dark-4">
-          <div className="flex items-center gap-2 text-white/70">
-            <User size={18} />
-            <span className="font-medium">Rally Typer Team</span>
-          </div>
+            <div className="flex flex-wrap items-center gap-6 mb-8 pb-8 border-b border-brand-dark-4">
+              <div className="flex items-center gap-2 text-white/70">
+                <User size={18} />
+                <span className="font-medium">Rally Typer Team</span>
+              </div>
 
-          <div className="flex items-center gap-2 text-white/70">
-            <Calendar size={18} />
-            <span>{formatDate(blogData.upload_date)}</span>
-          </div>
+              <div className="flex items-center gap-2 text-white/70">
+                <Calendar size={18} />
+                <span>{formatDate(blogData.upload_date)}</span>
+              </div>
 
-          <button className="ml-auto flex items-center gap-2 text-white/70 hover:text-brand transition-colors duration-300">
-            <Share2 size={18} />
-            <span className="font-medium">Share</span>
-          </button>
-        </div>
+              <button className="ml-auto flex items-center gap-2 text-white/70 hover:text-brand transition-colors duration-300">
+                <Share2 size={18} />
+                <span className="font-medium">Share</span>
+              </button>
+            </div>
 
-        {/* ✅ Featured Image */}
-        <div className="mb-12 rounded-2xl overflow-hidden">
-          <img
-            src={blogData.blogimage}
-            alt={blogData.title}
-            className="w-full h-[400px] object-cover"
-          />
-        </div>
+            {/* ✅ Featured Image */}
+            <div className="mb-12 rounded-2xl overflow-hidden">
+              <img
+                src={blogData.blogimage}
+                alt={blogData.title}
+                className="w-full h-[400px] object-cover"
+              />
+            </div>
 
-        <article
-          className="prose prose-invert max-w-none mb-20 text-white"
-          dangerouslySetInnerHTML={{ __html: blogData.content }}
-        ></article>
+            <article
+              className="prose prose-invert max-w-none mb-20 text-white"
+              dangerouslySetInnerHTML={{ __html: blogData.content }}
+            ></article>
+          </>
+        ) : (
+          <p className="text-white text-4xl text-center font-bold">
+            No Blog found
+          </p>
+        )}
       </div>
     </div>
   );

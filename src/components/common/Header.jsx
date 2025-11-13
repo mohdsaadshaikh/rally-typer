@@ -87,7 +87,7 @@ const Header = () => {
               {/* Post on X */}
               <li>
                 <a
-                  href="https://twitter.com/share?ref_src=twsrc%5Etfw"
+                  href="https://x.com/RallyTyper"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white hover:text-[#F25A06] font-semibold text-lg transition-colors duration-300"

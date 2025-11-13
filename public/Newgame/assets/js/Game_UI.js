@@ -14,7 +14,7 @@ let initText = function () {
     textArray = EASY_TEXTS;
   } else if (difficulty === 2) {
     textArray = NORMAL_TEXTS;
-  } else if (difficulty === 3) { 
+  } else if (difficulty === 3) {
     textArray = HARD_TEXTS;
   } else {
     textArray = ADVANCED_TEXTS;
@@ -31,7 +31,11 @@ let initText = function () {
   if (!gameState.correct) token = '<span class="marked incorrect">';
   ih = ih.replace(token, "");
   ih = ih.replace("</span>", "");
-  ih = '<span class="marked correct">' + ih[index] + "</span>" + ih.substring(index + 1, ih.length);
+  ih =
+    '<span class="marked correct">' +
+    ih[index] +
+    "</span>" +
+    ih.substring(index + 1, ih.length);
   textDiv.innerHTML = ih;
 
   gameState.correct = true;
@@ -47,7 +51,11 @@ let initText = function () {
 
 let initEndingScreen = function () {
   let time = car2.finishingTime / 1000; // in seconds
-  let accuracy = 100 - (gameState.stats.mistakes / (gameState.stats.characters + gameState.stats.mistakes)) * 100; // in percents
+  let accuracy =
+    100 -
+    (gameState.stats.mistakes /
+      (gameState.stats.characters + gameState.stats.mistakes)) *
+      100; // in percents
   accuracy = Math.round(accuracy * 100) / 100;
   let GWAM = gameState.stats.characters / 5 / (time / 60); // 1 word = 5 characters
   GWAM = Math.round(GWAM * 100) / 100;
@@ -137,14 +145,19 @@ let startRace = function () {
   gameState.typingAllowed = true;
   gameState.startingTime = Date.now(); // in miliseconds
   const fps = 30;
-  car1.animations.drive.timeScale = DIFFICULTY_LEVELS[difficulty].ENEMY_STARTING_SPEED;
+  car1.animations.drive.timeScale =
+    DIFFICULTY_LEVELS[difficulty].ENEMY_STARTING_SPEED;
   let speedUp = setInterval(function () {
-    if (car1.animations.drive.timeScale >= DIFFICULTY_LEVELS[difficulty].ENEMY_MAX_SPEED) {
+    if (
+      car1.animations.drive.timeScale >=
+      DIFFICULTY_LEVELS[difficulty].ENEMY_MAX_SPEED
+    ) {
       clearInterval(speedUp);
       return;
     }
     car1.animations.drive.timeScale +=
-      (DIFFICULTY_LEVELS[difficulty].ENEMY_MAX_SPEED - DIFFICULTY_LEVELS[difficulty].ENEMY_STARTING_SPEED) /
+      (DIFFICULTY_LEVELS[difficulty].ENEMY_MAX_SPEED -
+        DIFFICULTY_LEVELS[difficulty].ENEMY_STARTING_SPEED) /
       (DIFFICULTY_LEVELS[difficulty].ENEMY_SPEEDING_UP_TIME * fps);
   }, 1000 / fps);
 };

@@ -25,7 +25,7 @@ const HeroSection = () => {
       const q = query(colRef, orderBy("score", "desc"));
       const snapshot = await getDocs(q);
 
-      const data = snapshot.docs.slice(0, 10).map((doc, i) => {
+      const data = snapshot.docs.slice(0, 6).map((doc, i) => {
         const p = doc.data();
         const isTop3 = i < 3;
 
@@ -61,7 +61,7 @@ const HeroSection = () => {
       <div className="mx-auto px- sm:px-6 lg:px-18 relative z-10">
         <div className="grid lg:grid-cols-[1.5fr_1fr] gap-12 items-start">
           {/* Left Content */}
-          <div className="text-white space-y-10 mt-20">
+          <div className="text-white space-y-10 lg:mt-20 mt-10">
             <h1
               className="text-5xl sm:text-7xl space-y-2.5 font-medium leading-[1.1]"
               style={{ fontFamily: "Anton, sans-serif" }}

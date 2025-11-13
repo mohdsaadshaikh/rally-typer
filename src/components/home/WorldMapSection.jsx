@@ -7,6 +7,7 @@ import {
 } from "@vnedyalk0v/react19-simple-maps";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { MiniLoader } from "../common/Loader";
 
 const geoUrl = "https://unpkg.com/world-atlas@2/countries-110m.json";
 const IPINFO_TOKEN = "ca2e0ce571e7c3";
@@ -73,7 +74,7 @@ const WorldMapSection = () => {
   }, []);
 
   return (
-    <section className="md:py-20 py-8 sm:px-8 px-2 bg-black">
+    <section className="md:py-20 py-8 sm:px-8 px-2 bg-black" id="maps">
       <div className="container mx-auto max-w-full rounded-4xl bg-brand-dark-1 ">
         <div className="text-center md:mb-20 mb-8">
           <h2 className="text-brand text-xl sm:text-4xl font-bold mb-1 sm:mb-4 md:pt-20 pt-8 px-2 sm:px-5">
@@ -138,7 +139,9 @@ const WorldMapSection = () => {
 
           {loading && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-3xl">
-              <div className="text-white">Fetching live players...</div>
+              <p className="text-orange-400 text-lg font-semibold">
+                Loading...
+              </p>
             </div>
           )}
         </div>

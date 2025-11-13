@@ -1,36 +1,50 @@
 import { Copyright } from "lucide-react";
-import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
+
   const companyLinks = [
-    { name: "Leaderboard", path: "/leaderboard" },
-    { name: "Maps", path: "/maps" },
-    { name: "Login", path: "/login" },
-    { name: "Blog", path: "/blog" },
-    { name: "Contact Us", path: "/contact" },
+    { name: "Leaderboard" },
+    { name: "Maps" },
+    { name: "Blog", path: "/blogs" },
   ];
 
   const socialMedia = [
     {
       name: "X",
       icon: "/images/x-icon.svg",
-      url: "#",
+      url: "https://x.com/RallyTyper",
       color: "hover:text-white",
     },
     {
       name: "Instagram",
       icon: "/images/instagram-icon.svg",
-      url: "#",
+      url: "https://www.instagram.com/rallytyper1",
       color: "hover:text-pink-500",
     },
     {
       name: "Facebook",
       icon: "/images/facebook-icon.svg",
-      url: "#",
+      url: "https://www.facebook.com/people/Rally-Typer/100089588555558/?is_tour_dismissed=true",
       color: "hover:text-blue-500",
     },
   ];
+
+  // scroll helper
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // agar user kisi aur page par hai (e.g. /blogs), pehle home pe le jao
+      navigate("/");
+      setTimeout(() => {
+        const target = document.getElementById(id);
+        if (target) target.scrollIntoView({ behavior: "smooth" });
+      }, 300);
+    }
+  };
 
   return (
     <footer className="relative overflow-hidden bg-linear-to-r from-black to-brand">
@@ -70,13 +84,29 @@ const Footer = () => {
             <h3 className="text-white font-bold text-lg mb-6">Company</h3>
             <ul className="space-y-3">
               {companyLinks.map((link) => (
-                <li key={link.path}>
-                  <Link
-                    to={link.path}
-                    className="text-white/80 hover:text-[#F25A06] transition-colors duration-200 text-sm"
-                  >
-                    {link.name}
-                  </Link>
+                <li key={link.name}>
+                  {link.name === "Leaderboard" ? (
+                    <button
+                      onClick={() => scrollToSection("leaderboard-section")}
+                      className="cursor-pointer text-white/80 hover:text-[#F25A06] transition-colors duration-200 text-sm"
+                    >
+                      {link.name}
+                    </button>
+                  ) : link.name === "Maps" ? (
+                    <button
+                      onClick={() => scrollToSection("maps")}
+                      className="cursor-pointer text-white/80 hover:text-[#F25A06] transition-colors duration-200 text-sm"
+                    >
+                      {link.name}
+                    </button>
+                  ) : (
+                    <Link
+                      to={link.path}
+                      className="cursor-pointer text-white/80 hover:text-[#F25A06] transition-colors duration-200 text-sm"
+                    >
+                      {link.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -107,7 +137,7 @@ const Footer = () => {
             </div>
             <p className="text-white/80 text-sm max-w-xs">
               Follow Up on X, Instagram and Facebook and share your typing
-              journey with friends and family{" "}
+              journey with friends and family
             </p>
           </div>
         </div>
