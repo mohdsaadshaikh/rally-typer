@@ -63,7 +63,7 @@ const HeroSection = () => {
           {/* Left Content */}
           <div className="text-white space-y-10 lg:mt-20 mt-10">
             <h1
-              className="text-5xl sm:text-7xl space-y-2.5 font-medium leading-[1.1]"
+              className="text-5xl sm:text-7xl [@media(min-width:1565px)]:text-[85px] [@media(min-width:1720px)]:text-8xl space-y-2.5 font-medium leading-[1.1]"
               style={{ fontFamily: "Anton, sans-serif" }}
             >
               <span className="text-brand block max-lg:text-center">
@@ -82,7 +82,7 @@ const HeroSection = () => {
               </span>
             </h1>
             <p
-              className="text-lg lg:text-2xl text-white/90 lg:max-w-2xl w-full leading-11 max-lg:text-center max-lg:px-3"
+              className="text-lg lg:text-2xl [@media(min-width:1500px)]:text-3xl text-white/90 lg:max-w-2xl w-full leading-11 max-lg:text-center max-lg:px-3"
               style={{ fontFamily: "ADLaM Display, sans-serif" }}
             >
               Get ready for a high-speed challenge where your typing skills
