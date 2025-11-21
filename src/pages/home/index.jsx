@@ -2,7 +2,9 @@ import React from "react";
 import HeroSection from "@/components/home/HeroSection";
 import LeaderboardSection from "@/components/home/LeaderboardSection";
 import WorldMapSection from "@/components/home/WorldMapSection";
-import AboutSection from "@/components/home/AboutSection";
+import KeyboardSection from "@/components/home/KeyboardSection";
+import GlobalLeaderboardSection from "@/components/home/GlobalLeaderboardSection";
+import LevelUpSection from "@/components/home/LevelUpSection";
 import CountriesSection from "@/components/home/CountriesSection";
 import BlogSection from "@/components/home/BlogSection";
 
@@ -21,7 +23,9 @@ const HomePage = () => {
       />
       <LeaderboardSection />
       <WorldMapSection />
-      <AboutSection />
+      <KeyboardSection />
+      <GlobalLeaderboardSection />
+      <LevelUpSection />
       <CountriesSection />
       <BlogSection />
     </div>

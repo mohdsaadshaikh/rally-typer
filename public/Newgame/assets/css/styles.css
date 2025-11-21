@@ -394,9 +394,9 @@ body {
 
 #fullscreen-button {
   position: absolute;
-  bottom: 20px;
+  bottom: 30px;
   right: 20px;
-  background-color: #007bff; /* Set your desired background color */
+  background-color: #f25a06; /* Set your desired background color */
   color: #fff; /* Set your desired text color */
   border: none;
   cursor: pointer;
