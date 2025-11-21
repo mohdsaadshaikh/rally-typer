@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { db } from "@/lib/firebase";
 import {
   ComposableMap,
   Geographies,
@@ -6,10 +6,9 @@ import {
   Marker,
 } from "@vnedyalk0v/react19-simple-maps";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { MiniLoader } from "../common/Loader";
+import { useEffect, useState } from "react";
 
-const geoUrl = "https://unpkg.com/world-atlas@2/countries-110m.json";
+const geoUrl = "https://unpkg.com/world-atlas@2.0.2/countries-110m.json";
 const IPINFO_TOKEN = "ca2e0ce571e7c3";
 
 const WorldMapSection = () => {
