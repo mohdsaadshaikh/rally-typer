@@ -105,8 +105,6 @@ const LeaderboardSection = () => {
     return `https://flagcdn.com/${code.toLowerCase()}.svg`;
   };
 
-  console.log("Leaderboard Data:", leaderboardData);
-
   return (
     <section className="py-20 md:px-8 bg-black" id="leaderboard-section">
       <div className="md:mx-auto max-w-6xl">

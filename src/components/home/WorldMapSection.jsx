@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { db } from "@/lib/firebase";
 import {
   ComposableMap,
   Geographies,
@@ -6,13 +6,10 @@ import {
   Marker,
 } from "@vnedyalk0v/react19-simple-maps";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { MiniLoader } from "../common/Loader";
+import { useEffect, useState } from "react";
 
 // const geoUrl = "https://unpkg.com/world-atlas@2/countries-110m.json";
 const geoUrl = "https://unpkg.com/world-atlas@2.0.2/countries-110m.json";
-
-const IPINFO_TOKEN = "ca2e0ce571e7c3";
 
 const WorldMapSection = () => {
   const [markers, setMarkers] = useState([]);
@@ -28,22 +25,20 @@ const WorldMapSection = () => {
           .map((doc) => doc.data().ip)
           .filter((ip) => ip && ip !== "unknown" && ip !== null);
 
-        const uniqueIps = [...new Set(ipList)].slice(0, 20); // Max 20 for free tier
+        const uniqueIps = [...new Set(ipList)].slice(0, 20);
 
         const coordsPromises = uniqueIps.map(async (ip) => {
           try {
             // Main endpoint: https://ipinfo.io/{ip}/json?token=TOKEN
-            const res = await fetch(
-              `https://ipinfo.io/${ip}/json?token=${IPINFO_TOKEN}`
-            );
+            const res = await fetch(`https://ipwho.is/${ip}`);
+
             if (!res.ok) return null;
 
             const data = await res.json();
-            if (data.loc) {
-              const [lat, lon] = data.loc.split(",").map(parseFloat);
+            if (data.success && data.latitude && data.longitude) {
               return {
                 name: data.city || data.country || "Unknown",
-                coordinates: [lon, lat], // [lon, lat] format for Marker
+                coordinates: [data.longitude, data.latitude], // [lon, lat]
               };
             }
           } catch (e) {
@@ -69,10 +64,6 @@ const WorldMapSection = () => {
     };
 
     fetchActivePlayers();
-
-    // Refresh every 2 minutes (120 sec)
-    const interval = setInterval(fetchActivePlayers, 120000);
-    return () => clearInterval(interval);
   }, []);
 
   return (

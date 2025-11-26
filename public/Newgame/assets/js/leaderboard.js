@@ -90,7 +90,6 @@ countryInput.addEventListener("input", () => {
   dropdown.innerHTML = ""; // Clear previous suggestions
   dropdown.style.display = "none";
 
-  console.log(countries);
   if (query) {
     const matches = countries.filter((country) =>
       country.name.toLowerCase().startsWith(query)
