@@ -1,4 +1,4 @@
-import { db } from "@/lib/firebase";
+import React, { useState, useEffect } from "react";
 import {
   ComposableMap,
   Geographies,
@@ -6,9 +6,12 @@ import {
   Marker,
 } from "@vnedyalk0v/react19-simple-maps";
 import { collection, getDocs } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { db } from "@/lib/firebase";
+import { MiniLoader } from "../common/Loader";
 
+// const geoUrl = "https://unpkg.com/world-atlas@2/countries-110m.json";
 const geoUrl = "https://unpkg.com/world-atlas@2.0.2/countries-110m.json";
+
 const IPINFO_TOKEN = "ca2e0ce571e7c3";
 
 const WorldMapSection = () => {
@@ -79,7 +82,7 @@ const WorldMapSection = () => {
           <h2 className="text-brand text-xl sm:text-4xl font-bold mb-1 sm:mb-4 md:pt-20 pt-8 px-2 sm:px-5">
             Typing Races Happening All Around the World
           </h2>
-          <p className="text-gray-100 text-sm max-sm:px-2">
+          <p className="text-gray-100 sm:text-xl text-sm max-sm:px-2">
             Real-time typing races happening globally. Join the rally!
           </p>
         </div>

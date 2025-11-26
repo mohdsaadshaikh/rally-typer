@@ -136,8 +136,8 @@ const Footer = () => {
               ))}
             </div>
             <p className="text-white/80 text-sm max-w-xs">
-              Follow Up on X, Instagram and Facebook and share your typing
-              journey with friends and family
+              Follow us on Instagram, Facebook and X to share your typing
+              journey with friends and family.
             </p>
           </div>
         </div>

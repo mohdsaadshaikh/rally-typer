@@ -5,6 +5,7 @@ import { db } from "@/lib/firebase";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { shortName, TOP_3_AVATARS } from "@/lib/utils";
 import { MiniLoader } from "../common/Loader";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 const FALLBACK_AVATAR = "/images/avatar.svg";
 
@@ -51,6 +52,7 @@ const LeaderboardSection = () => {
           accuracy: p.accuracy,
           country: p.country || "XX",
           avatar: isTop3 ? TOP_3_AVATARS[i] : FALLBACK_AVATAR,
+          date: p.date || null,
         };
       });
 
@@ -102,6 +104,8 @@ const LeaderboardSection = () => {
     if (country?.flag) return country.flag;
     return `https://flagcdn.com/${code.toLowerCase()}.svg`;
   };
+
+  console.log("Leaderboard Data:", leaderboardData);
 
   return (
     <section className="py-20 md:px-8 bg-black" id="leaderboard-section">
@@ -174,7 +178,7 @@ const LeaderboardSection = () => {
           )}
         </div>
 
-        <div className="bg-brand-dark-3 md:p-10 p-3">
+        <div className="bg-brand-dark-3 lg:p-10 p-3">
           <div className="grid grid-cols-5 max-w-5xl mx-auto my-10 md:gap-6 gap-3 relative z-10">
             {difficulties.map((difficulty) => (
               <DifficultyCard
@@ -197,72 +201,81 @@ const LeaderboardSection = () => {
               </button>
             </div>
           </div>
-
-          <div className="space-y-4">
-            <div className="grid grid-cols-5 gap-8 md:p-6 p-4 bg-brand-dark-2 rounded-lg">
-              <div className="text-white text-[10px] [@media(min-width:520px)]:text-sm md:text-lg font-medium uppercase">
-                Position
-              </div>
-              <div className="text-white text-[10px] [@media(min-width:520px)]:text-sm md:text-lg font-medium uppercase">
-                Username
-              </div>
-              <div className="text-center text-white text-[10px] [@media(min-width:520px)]:text-sm md:text-lg font-medium uppercase">
-                Country
-              </div>
-              <div className="text-center text-white text-[10px] [@media(min-width:520px)]:text-sm md:text-lg font-medium uppercase">
-                Accuracy
-              </div>
-              <div className="text-center text-white text-[10px] [@media(min-width:520px)]:text-sm md:text-lg font-medium uppercase">
-                WPM
-              </div>
-            </div>
-
-            {!loading && !error && leaderboardData.length === 0 && (
-              <div className="text-center text-white py-10">
-                No scores yet. Be the first!
-              </div>
-            )}
-
-            {leaderboardData.slice(0, 20).map((player, index) => (
-              <div className="[@media(min-width:600px)]:grid [@media(min-width:600px)]:grid-cols-5 flex justify-between items-center md:px-8 md:py-5 px-3 py-2 bg-brand-dark-4 rounded-lg hover:bg-brand-dark-2 transition-colors duration-200">
-                <div className="text-white font-bold sm:text-lg text-sm">
-                  {String(index + 1).padStart(2, "0")}
+          <ScrollArea className="w-full rounded-md whitespace-nowrap">
+            <div className="space-y-4 min-w-2xl">
+              <div className="grid grid-cols-6 gap-8 md:p-6 p-4 bg-brand-dark-2 rounded-lg">
+                <div className="text-white text-[10px] [@media(min-width:520px)]:text-sm lg:text-lg font-medium uppercase">
+                  Position
                 </div>
+                <div className="text-white text-[10px] [@media(min-width:520px)]:text-sm lg:text-lg font-medium uppercase">
+                  Username
+                </div>
+                <div className="text-center text-white text-[10px] [@media(min-width:520px)]:text-sm lg:text-lg font-medium uppercase">
+                  Country
+                </div>
+                <div className="text-center text-white text-[10px] [@media(min-width:520px)]:text-sm lg:text-lg font-medium uppercase">
+                  Accuracy
+                </div>
+                <div className="text-center text-white text-[10px] [@media(min-width:520px)]:text-sm lg:text-lg font-medium uppercase">
+                  WPM
+                </div>
+                <div className="text-center text-white text-[10px] [@media(min-width:520px)]:text-sm md:text-lg font-medium uppercase">
+                  Date
+                </div>
+              </div>
 
-                {/* Username + Avatar */}
-                <div className="flex items-center gap-4 flex-nowrap">
-                  <div className="md:w-14 md:h-14 w-10 h-10 rounded-full overflow-hidden flex items-center shrink-0 justify-center bg-transparent">
+              {!loading && !error && leaderboardData.length === 0 && (
+                <div className="text-center text-white py-10">
+                  No scores yet. Be the first!
+                </div>
+              )}
+
+              {leaderboardData.slice(0, 20).map((player, index) => (
+                <div className="grid grid-cols-6 items-center lg:px-8 md:py-5 px-3 py-2 bg-brand-dark-4 rounded-lg hover:bg-brand-dark-2 transition-colors duration-200">
+                  <div className="text-white font-bold sm:text-lg text-sm">
+                    {String(index + 1).padStart(2, "0")}
+                  </div>
+
+                  {/* Username + Avatar */}
+                  <div className="flex items-center gap-4 flex-nowrap">
+                    <div className="lg:w-14 lg:h-14 w-10 h-10 rounded-full overflow-hidden flex items-center shrink-0 justify-center bg-transparent">
+                      <img
+                        src={player.avatar}
+                        alt={player.username}
+                        className="w-full h-full object-cover"
+                        onError={(e) => (e.target.src = FALLBACK_AVATAR)}
+                      />
+                    </div>
+                    <span className="text-white font-medium lg:text-lg text-sm">
+                      {shortName(player.username, 12)}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-center">
                     <img
-                      src={player.avatar}
-                      alt={player.username}
-                      className="w-full h-full object-cover"
-                      onError={(e) => (e.target.src = FALLBACK_AVATAR)}
+                      src={getFlagUrl(player.country)}
+                      alt={player.country}
+                      className="md:w-12 md:h-8 w-8 h-5 object-cover shadow-sm rounded"
+                      onError={(e) => (e.target.src = "/images/earth.png")}
                     />
                   </div>
-                  <span className="text-white font-medium md:text-lg text-sm">
-                    {shortName(player.username, 12)}
-                  </span>
-                </div>
 
-                <div className="flex justify-center">
-                  <img
-                    src={getFlagUrl(player.country)}
-                    alt={player.country}
-                    className="md:w-12 md:h-8 w-8 h-5 object-cover shadow-sm rounded"
-                    onError={(e) => (e.target.src = "/images/earth.png")}
-                  />
-                </div>
+                  <div className="text-center text-white font-medium lg:text-lg text-sm">
+                    {player.accuracy ? `${Math.round(player.accuracy)}%` : "-"}
+                  </div>
 
-                <div className="text-center text-white font-medium md:text-lg text-sm">
-                  {player.accuracy ? `${Math.round(player.accuracy)}%` : "-"}
-                </div>
+                  <div className="text-center text-white font-medium lg:text-lg text-sm">
+                    {Math.round(player.score)} WPM
+                  </div>
 
-                <div className="text-center text-white font-medium md:text-lg text-sm">
-                  {Math.round(player.score)} WPM
+                  <div className="text-center text-white font-medium lg:text-lg text-sm">
+                    {player.date}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+            <ScrollBar orientation="horizontal" className="" />
+          </ScrollArea>
         </div>
       </div>
     </section>

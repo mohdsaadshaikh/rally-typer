@@ -184,6 +184,12 @@ body {
   height: 100%;
 }
 
+html,
+body::selection {
+  background-color: var(--color-brand);
+  color: white;
+}
+
 /* Re-enable after load */
 html.loaded {
   scroll-behavior: smooth;

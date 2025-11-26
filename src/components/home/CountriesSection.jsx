@@ -70,11 +70,11 @@ const CountriesSection = () => {
           <MarqueeContent speed={50} pauseOnHover={true}>
             {countries.slice(0, 25).map((country, index) => (
               <MarqueeItem key={index}>
-                <div className="w-40 h-28">
+                <div className="aspect-video w-56 flex items-center justify-center overflow-hidden shadow-md">
                   <img
                     src={`https://flagcdn.com/${country.code}.svg`}
                     alt={`${country.name} flag`}
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-cover"
                   />
                 </div>
               </MarqueeItem>
